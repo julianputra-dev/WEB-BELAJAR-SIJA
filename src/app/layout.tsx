@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'SIJA SecLab - Platform Simulasi Keamanan Siber Interaktif',
+  title: 'SIJA SecLab - Laboratorium Simulasi & Penanganan Insiden Keamanan Siber',
   description:
-    'Media pembelajaran interaktif berbasis web untuk siswa SMK SIJA: Simulasi visual analisis infeksi dan penanganan SOP malware di lingkungan sandbox.',
+    'Portal edukasi dan praktikum keamanan jaringan terisolasi untuk program keahlian SIJA. Simulasi telemetri serangan dan penanganan insiden berbasis standar operasional prosedur.',
 };
 
 export default function RootLayout({
@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className="dark">
-      <body className="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+    <html lang="id">
+      <body className="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-slate-900 selection:text-white">
         {children}
       </body>
     </html>

@@ -1,140 +1,110 @@
 // File: src/app/modules/security/page.tsx
-'use client';
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { allScenarios } from '@/data/scenarios';
-import { ProgressService, ModuleProgressRecord } from '@/services/progressService';
 import {
   Shield,
-  ArrowRight,
-  CheckCircle2,
-  AlertCircle,
-  Network,
-  FileCode,
-  HardDrive,
-  Cpu,
-  KeyRound,
   ArrowLeft,
+  ArrowRight,
+  ChevronRight,
+  Lock,
+  Database,
+  Globe,
+  Bug,
 } from 'lucide-react';
-import { MalwareType } from '@/types/simulation';
 
-const MALWARE_ICONS: Record<MalwareType, React.ReactNode> = {
-  worm: <Network className="w-5 h-5 text-blue-400" />,
-  ransomware: <HardDrive className="w-5 h-5 text-red-400" />,
-  trojan: <Cpu className="w-5 h-5 text-amber-400" />,
-  virus: <FileCode className="w-5 h-5 text-purple-400" />,
-  spyware: <KeyRound className="w-5 h-5 text-emerald-400" />,
-};
-
-export default function SecurityModulesPage() {
-  const [progressMap, setProgressMap] = useState<Record<string, ModuleProgressRecord>>({});
-
-  useEffect(() => {
-    ProgressService.getAllProgress().then(setProgressMap);
-  }, []);
+export default function SecuritySubjectPage() {
+  const subtopics = [
+    {
+      id: 'malware',
+      title: 'Analisis & Simulasi Malware',
+      desc: 'Observasi 5 skenario malware di lingkungan terisolasi serta validasi SOP mitigasi berurutan.',
+      href: '/modules/security/malware',
+      icon: <Bug className="w-5 h-5 text-slate-800" />,
+      badge: '5 Lab Tersedia',
+    },
+    {
+      id: 'cia-triad',
+      title: 'Prinsip Dasar CIA Triad',
+      desc: 'Fondasi Confidentiality, Integrity, dan Availability dalam tata kelola keamanan informasi.',
+      href: '/modules/security/cia-triad',
+      icon: <Lock className="w-5 h-5 text-slate-600" />,
+      badge: 'Silabus Kurikulum',
+    },
+    {
+      id: 'data-protection',
+      title: 'Keamanan Data: Transit, Rest, In-Use',
+      desc: 'Proteksi kriptografi data saat tersimpan di disk, ditransmisikan di jaringan, dan diproses di RAM.',
+      href: '/modules/security/data-protection',
+      icon: <Database className="w-5 h-5 text-slate-600" />,
+      badge: 'Silabus Kurikulum',
+    },
+    {
+      id: 'web-security',
+      title: 'Keamanan Web & OWASP Top 10',
+      desc: 'Analisis kerentanan aplikasi web (SQLi, XSS, CSRF) dan konfigurasi proteksi firewall.',
+      href: '/modules/security/web-security',
+      icon: <Globe className="w-5 h-5 text-slate-600" />,
+      badge: 'Silabus Kurikulum',
+    },
+  ];
 
   return (
-    <div className="flex-1 flex flex-col p-6 md:p-10 max-w-7xl mx-auto w-full">
-      {/* Top Header Navigation */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-8">
-        <div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-slate-900 selection:text-white flex flex-col w-full">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 md:py-8 w-full flex-1">
+        {/* Header Dasbor Ringkas */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5 mb-8">
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+              <Shield className="w-6 h-6 text-slate-800" />
+              Keamanan Sistem Informasi
+            </h1>
+            <p className="text-xs text-slate-600 mt-1 max-w-2xl leading-relaxed">
+              Modul pembelajaran tata kelola keamanan aset digital, kepatuhan CIA Triad, dan simulasi respons insiden.
+            </p>
+          </div>
+
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400 font-mono mb-2 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium rounded border border-slate-300 transition-colors shrink-0 shadow-xs"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Kembali ke Beranda
+            <span>Kembali ke Beranda</span>
           </Link>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            Modul Praktik Keamanan Siber SMK SIJA
-          </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1">
-            Pilih skenario ancaman siber untuk memulai observasi perilaku malware dan eksekusi mitigasi SOP.
-          </p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-xs font-mono text-slate-300">
-          Status Modul:{' '}
-          <span className="text-cyan-400 font-bold">
-            {Object.keys(progressMap).length} / 5 Diselesaikan
-          </span>
-        </div>
-      </div>
-
-      {/* Grid 5 Kartu Skenario Malware */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Object.values(allScenarios).map((scenario) => {
-          const progress = progressMap[scenario.id];
-          const isCompleted = progress?.mitigationCompleted;
-
-          return (
+        {/* Grid Sub-Topik Keamanan */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {subtopics.map((topic) => (
             <div
-              key={scenario.id}
-              className="bg-slate-900/60 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/20 group relative overflow-hidden"
+              key={topic.id}
+              className="bg-white border border-slate-200 rounded-lg p-6 flex flex-col justify-between hover:border-slate-400 transition-colors shadow-xs"
             >
               <div className="space-y-4">
-                {/* Badge & Icon Header */}
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
-                    {MALWARE_ICONS[scenario.id]}
+                  <div className="p-2.5 rounded bg-slate-100 border border-slate-200">
+                    {topic.icon}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                      {scenario.difficulty}
-                    </span>
-                    {isCompleted && (
-                      <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2 py-0.5 rounded-full">
-                        <CheckCircle2 className="w-3 h-3" />
-                        LULUS SOP
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Title & Badge */}
-                <div>
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-semibold mb-1">
-                    {scenario.badge}
-                  </div>
-                  <h2 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
-                    {scenario.title}
-                  </h2>
-                </div>
-
-                {/* Description */}
-                <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
-                  {scenario.description}
-                </p>
-
-                {/* Target SOP Checklist Preview */}
-                <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                    Target Prosedur Penanganan:
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-semibold">
+                    {topic.badge}
                   </span>
-                  {scenario.targetSop.map((step, idx) => (
-                    <div key={idx} className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0" />
-                      <span className="truncate">{step}</span>
-                    </div>
-                  ))}
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-slate-900">{topic.title}</h2>
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">{topic.desc}</p>
                 </div>
               </div>
-
-              {/* Action Link Footer */}
-              <div className="mt-6 pt-4 border-t border-slate-800/60">
+              <div className="mt-6 pt-4 border-t border-slate-100">
                 <Link
-                  href={`/modules/security/lab/${scenario.id}`}
-                  className="w-full py-2.5 px-4 bg-slate-800 hover:bg-cyan-600 hover:text-black text-slate-200 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200"
+                  href={topic.href}
+                  className="inline-flex items-center justify-between w-full text-xs font-semibold text-slate-900 hover:text-blue-900 transition-colors group"
                 >
-                  <span>Buka Ruang Kerja Simulasi</span>
+                  <span>Buka Modul & Laboratorium</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );
