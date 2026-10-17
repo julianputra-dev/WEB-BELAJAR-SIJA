@@ -1,88 +1,124 @@
 // File: src/components/virus/lab/SopTaskSidebar.tsx
+'use client';
+
 import React from 'react';
+import Link from 'next/link';
 import { useVirusLabStore } from '@/store/useVirusLabStore';
-import { CheckCircle2, Circle, Play, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { MissionConceptAccordion } from './MissionConceptAccordion';
+import { CheckCircle2, Circle, ShieldCheck, AlertCircle, Compass, ArrowRight } from 'lucide-react';
 
 export function SopTaskSidebar() {
-  const { phase, safeMode, binaries, processes, triggerInfection, feedbackMessage } = useVirusLabStore();
+  const {
+    phase,
+    completedSteps,
+    binaries,
+    processes,
+    reinfectionAlert,
+    clearReinfectionAlert,
+  } = useVirusLabStore();
 
-  const isRogueTerminated = processes.find((p) => p.isMalicious)?.status === 'terminated';
-  const isCarrierQuarantined = binaries.find((b) => b.isCarrier)?.status === 'quarantined';
-  const isAllDisinfected = binaries.filter((b) => !b.isCarrier).every((b) => b.status === 'disinfected');
+  const isAllDisinfected = completedSteps.step4;
 
-  const tasks = [
+  const missionTasks = [
     {
-      step: '1',
-      title: 'Triage Memori & Kill PID Parasit',
-      done: isRogueTerminated,
-      active: phase === 'infected',
-      desc: 'Analisis tabel Process Explorer dan hentikan proses muatan parasit (PID 3844).',
+      id: 'step1',
+      number: '1',
+      title: 'Triage Anomali Memori RAM',
+      done: completedSteps.step1,
+      active: phase === 'infected' && !completedSteps.step1,
+      symptomDesc:
+        'Identifikasi proses di Process Explorer yang mengonsumsi CPU secara tidak wajar (>80%) dan tidak memiliki sertifikat tanda tangan resmi, lalu hentikan proses (SIGKILL).',
+      conceptReason:
+        'Proses aktif di RAM bertindak sebagai engine replikasi yang menyuntikkan muatan kode parasit ke berkas lain. Menghentikan proses di memori memutus siklus replikasi aktif secara instan.',
+      realWorldDefense:
+        'Pada SOC modern, analisis RAM dilakukan menggunakan EDR (Endpoint Detection and Response) untuk mendeteksi process hollowing dan anomali thread CPU secara otomatis.',
     },
     {
-      step: '2',
-      title: 'Booting Mode Diagnostik (SafeBoot)',
-      done: safeMode,
-      active: isRogueTerminated && !safeMode,
-      desc: 'Buka tab PE Header & Registri, lalu aktifkan Diagnostic Boot untuk mengisolasi driver.',
+      id: 'step2',
+      number: '2',
+      title: 'Isolasi Lingkungan Sistem (SafeBoot)',
+      done: completedSteps.step2,
+      active: completedSteps.step1 && !completedSteps.step2,
+      symptomDesc:
+        'Sistem operasi standar masih rentan terhadap persistence hook driver. Beralih ke Diagnostic Mode untuk mengunci registri SafeBoot dan mematikan driver pihak ketiga.',
+      conceptReason:
+        'Driver pihak ketiga dapat mengaitkan (hook) fungsi kernel untuk mencegah berkas malware dihapus (status File in Use). SafeBoot hanya memuat driver minimal bersertifikat.',
+      realWorldDefense:
+        'Administrator enterprise mengunci konfigurasi UEFI Secure Boot dan GPO untuk mencegah pemuatan driver pihak ketiga tanpa sertifikasi resmi Microsoft WHQL.',
     },
     {
-      step: '3',
-      title: 'Karantina Biner Pembawa (Carrier)',
-      done: isCarrierQuarantined,
-      active: safeMode && !isCarrierQuarantined,
-      desc: 'Buka tab Hash Comparator, pilih setup_game.exe, dan pindahkan ke Brankas Karantina.',
+      id: 'step3',
+      number: '3',
+      title: 'Karantina Vektor Asal Infeksi',
+      done: completedSteps.step3,
+      active: completedSteps.step2 && !completedSteps.step3,
+      symptomDesc:
+        'Identifikasi biner asing tidak dikenal di direktori yang bertindak sebagai pembawa muatan awal, lalu amankan ke Brankas Karantina tanpa izin eksekusi.',
+      conceptReason:
+        'Mengisolasi biner pembawa ke Brankas Karantina mencabut hak eksekusi (chmod 000 / No-Execute ACL) sehingga berkas tidak dapat dijalankan kembali secara manual maupun otomatis.',
+      realWorldDefense:
+        'Penerapan Application Control (AppLocker / WDAC) memastikan hanya aplikasi yang terdaftar dalam daftar putih (allowlist) yang diizinkan berjalan di workstation.',
     },
     {
-      step: '4',
-      title: 'Disinfeksi Header PE & SHA-256 Match',
-      done: isAllDisinfected,
-      active: isCarrierQuarantined && !isAllDisinfected,
-      desc: 'Jalankan disinfeksi biner host untuk memotong muatan parasit dan verifikasi hash ke baseline.',
+      id: 'step4',
+      number: '4',
+      title: 'Bedah Struktur PE & Rekonsiliasi Hash',
+      done: completedSteps.step4,
+      active: completedSteps.step3 && !completedSteps.step4,
+      symptomDesc:
+        'Gunakan Binary X-Ray untuk memeriksa biner inang yang membengkak. Pangkas seksi parasit (.parasite), kembalikan EntryPoint asli, dan pastikan hash SHA-256 cocok 100%.',
+      conceptReason:
+        'Disinfeksi biner sejati membedah header PE, memotong muatan parasit di akhir berkas, dan memulihkan AddressOfEntryPoint sehingga biner program asli dapat digunakan kembali dengan aman.',
+      realWorldDefense:
+        'Penerapan File Integrity Monitoring (FIM) seperti OSSEC, Tripwire, atau Wazuh yang secara rutin memverifikasi hash SHA-256 berkas sistem terhadap Golden Image Baseline.',
     },
   ];
 
   return (
-    <aside className="w-full lg:w-80 bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between shadow-xs">
-      <div className="space-y-4">
+    <aside className="w-full bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between shadow-xs">
+      <div className="space-y-3.5">
         <div>
-          <div className="text-xs font-mono uppercase tracking-wider text-slate-500">
-            Panduan Prosedur
+          <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-slate-800" />
+            <span>Misi Investigasi Forensik (NIST SP 800-61)</span>
           </div>
-          <h2 className="text-sm font-bold text-slate-900 mt-0.5">
-            SOP Remediasi Forensik File Infector
+          <h2 className="text-xs font-bold text-slate-900 mt-0.5">
+            Panduan Berbasis Gejala &amp; Analisis Sebab-Akibat
           </h2>
         </div>
 
-        {/* Action Trigger Infeksi Awal */}
-        {phase === 'idle' && (
-          <div className="p-3.5 rounded bg-amber-50 border border-amber-200 space-y-2">
-            <div className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
-              <Play className="w-3.5 h-3.5 text-amber-700" />
-              <span>Simulasi Belum Berjalan</span>
+        {/* Re-infection Alert Banner if triggered */}
+        {reinfectionAlert && (
+          <div className="p-3 rounded-lg bg-red-50 border border-red-300 text-red-950 text-xs space-y-2 animate-in fade-in">
+            <div className="flex items-start justify-between gap-1">
+              <div className="font-bold flex items-center gap-1.5 text-red-900 text-[11px]">
+                <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                <span>Eksperimen Re-Infeksi Nyata!</span>
+              </div>
+              <button
+                onClick={clearReinfectionAlert}
+                className="text-[10px] text-red-700 hover:text-red-950 underline font-mono"
+              >
+                Tutup
+              </button>
             </div>
-            <p className="text-[11px] text-amber-800 leading-relaxed">
-              Jalankan berkas pembawa setup_game.exe untuk mengamati perilaku replikasi virus dan memicu anomali telemetri.
+            <p className="text-[10px] leading-relaxed text-red-800 font-sans">
+              {reinfectionAlert}
             </p>
-            <button
-              onClick={triggerInfection}
-              className="w-full py-2 bg-red-700 hover:bg-red-800 text-white text-xs font-bold rounded transition-colors shadow-xs"
-            >
-              Jalankan setup_game.exe (Mulai Infeksi)
-            </button>
           </div>
         )}
 
-        {/* Task Steps */}
-        <div className="space-y-3">
-          {tasks.map((t) => (
+        {/* Task Steps with Concept Accordions */}
+        <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] pr-1">
+          {missionTasks.map((t) => (
             <div
-              key={t.step}
-              className={`p-3 rounded border text-xs transition-colors ${
+              key={t.id}
+              className={`p-3 rounded-lg border text-xs transition-colors ${
                 t.done
-                  ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+                  ? 'bg-emerald-50/60 border-emerald-300 text-emerald-950'
                   : t.active
-                  ? 'bg-blue-50 border-blue-300 text-blue-950 ring-1 ring-blue-300'
-                  : 'bg-slate-50 border-slate-200 text-slate-600'
+                  ? 'bg-slate-100 border-slate-400 text-slate-900 ring-1 ring-slate-400'
+                  : 'bg-slate-50/80 border-slate-200 text-slate-600'
               }`}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -91,21 +127,45 @@ export function SopTaskSidebar() {
                 ) : (
                   <Circle className="w-4 h-4 text-slate-400 shrink-0" />
                 )}
-                <span className="font-bold">Langkah {t.step}: {t.title}</span>
+                <span className="font-bold text-[11px]">
+                  Misi {t.number}: {t.title}
+                </span>
               </div>
-              <p className="text-[11px] leading-relaxed pl-6">{t.desc}</p>
+
+              <p className="text-[10px] leading-relaxed pl-6 text-slate-600 font-sans">
+                {t.symptomDesc}
+              </p>
+
+              {/* Dynamic Accordion Unlocked after completion */}
+              <div className="pl-6">
+                <MissionConceptAccordion
+                  stepTitle={`Misi ${t.number}`}
+                  isUnlocked={t.done}
+                  conceptReason={t.conceptReason}
+                  realWorldDefense={t.realWorldDefense}
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       {isAllDisinfected && (
-        <div className="mt-4 p-3 rounded bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-mono space-y-1">
+        <div className="mt-3 p-3 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs font-mono space-y-2">
           <div className="font-bold flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-700" />
             <span>INVESTIGASI LULUS 100%</span>
           </div>
-          <p className="text-[11px]">Progres disimpan otomatis ke database lokal melalui ProgressService.</p>
+          <p className="text-[10px] leading-relaxed font-sans">
+            Seluruh berkas host dipulihkan dan progres terekam otomatis ke database. Anda siap melanjutkan ke materi berikutnya!
+          </p>
+          <Link
+            href="/modules/security/worm/intro"
+            className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded border border-slate-900 flex items-center justify-center gap-2 transition-colors font-sans shadow-sm"
+          >
+            <span>Lanjut ke Materi Berikutnya: Network Worm</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       )}
     </aside>

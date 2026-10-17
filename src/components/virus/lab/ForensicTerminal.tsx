@@ -12,7 +12,7 @@ export function ForensicTerminal() {
   }, [systemLogs]);
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-lg p-3.5 flex flex-col h-48 shadow-inner font-mono text-xs">
+    <div className="bg-slate-900 border border-slate-800 rounded-lg p-3 flex flex-col h-36 shadow-inner font-mono text-xs">
       <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-slate-400 text-[11px] mb-2 select-none">
         <div className="flex items-center gap-2">
           <Terminal className="w-3.5 h-3.5 text-slate-300" />

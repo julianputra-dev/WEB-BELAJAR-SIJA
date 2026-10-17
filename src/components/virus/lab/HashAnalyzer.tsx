@@ -76,7 +76,7 @@ export function HashAnalyzer() {
                   onClick={() => setSelectedFileId(bin.id)}
                   className={`cursor-pointer transition-colors ${
                     selectedFileId === bin.id
-                      ? 'bg-blue-100/70 border-l-4 border-l-blue-700'
+                      ? 'bg-slate-100 border-l-4 border-l-slate-900'
                       : isTampered
                       ? 'bg-red-50 hover:bg-red-100/70'
                       : 'hover:bg-slate-50'
