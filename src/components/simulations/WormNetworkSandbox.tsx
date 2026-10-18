@@ -166,7 +166,7 @@ export const WormNetworkSandbox: React.FC = () => {
       return;
     }
 
-    togglePort445('pc-01', false);
+    togglePort445('pc-01');
     setPhase(
       'mitigation_step_2',
       '[SOP-2 SUCCESS] Firewall rule aktif: Port 445 ditutup permanen.'
