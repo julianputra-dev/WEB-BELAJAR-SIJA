@@ -6,7 +6,7 @@ export const ransomwareScenario: ScenarioMetadata = {
   title: 'Ransomware (Enkripsi Berkas & Penyanderaan)',
   badge: 'Storage & Encryption',
   description:
-    'Simulasi serangan pemerasan digital yang mengeksploitasi kelengahan pengguna melalui rekayasa sosial ekstensi ganda (.pdf.exe) dan mengenkripsi dokumen penting.',
+    'Investigasi rekayasa sosial ekstensi ganda (.pdf.exe), enkripsi kriptografis hibrida berkas (.locked), proteksi perambatan storage NAS, dan restorasi offline backup.',
   difficulty: 'Menengah',
   targetSop: [
     'Isolasi Akses Shared Folder / NAS',

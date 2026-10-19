@@ -6,7 +6,7 @@ export const wormScenario: ScenarioMetadata = {
   title: 'Network Worm (Propagasi Otomatis LAN)',
   badge: 'Network Propagation',
   description:
-    'Simulasi penyebaran malware mandiri yang melintasi jaringan lokal memanfaatkan celah Port 445 (SMB) tanpa memerlukan interaksi pengguna.',
+    'Investigasi propagasi mandiri lintas subnet via Port SMB 445, inspeksi paket jaringan X-Ray, isolasi fisik/logika LAN, dan eliminasi thread parasit di memori RAM.',
   difficulty: 'Menengah',
   targetSop: [
     'Isolasi Jaringan (Disconnect LAN)',
