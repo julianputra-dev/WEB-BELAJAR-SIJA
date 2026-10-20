@@ -1,7 +1,7 @@
 // File: src/components/ransomware/theory/RansomwareTaxonomySection.tsx
 import React from 'react';
 import { RANSOMWARE_TYPES, LOCKER_VS_CRYPTO_COMPARISON } from '@/data/ransomwareTheoryData';
-import { MonitorX, FileKey2, SplitSquareVertical, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { MonitorX, FileKey2, SplitSquareVertical } from 'lucide-react';
 
 export function RansomwareTaxonomySection() {
   return (

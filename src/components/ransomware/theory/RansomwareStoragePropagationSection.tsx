@@ -1,7 +1,7 @@
 // File: src/components/ransomware/theory/RansomwareStoragePropagationSection.tsx
 import React from 'react';
 import { STORAGE_PROPAGATION_VECTORS, RANSOMWARE_IOCS } from '@/data/ransomwareTheoryData';
-import { Server, HardDrive, AlertTriangle, ShieldX, Radio } from 'lucide-react';
+import { Server, AlertTriangle, ShieldX, Radio } from 'lucide-react';
 
 export function RansomwareStoragePropagationSection() {
   return (

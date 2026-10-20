@@ -68,7 +68,7 @@ export function RansomwareSopRoadmapCard() {
           Prasyarat Teori Selesai • Siap Masuk ke Lingkungan Simulasi Sandboxing
         </div>
         <Link
-          href="/modules/security/malware/lab/ransomware"
+          href="/modules/security/ransomware/lab"
           className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs uppercase tracking-wider rounded transition-colors"
         >
           <span>Masuk ke Ruang Kerja Lab Ransomware</span>

@@ -39,7 +39,7 @@ export function RansomwareHeroBanner() {
 
         <div className="shrink-0">
           <Link
-            href="/modules/security/malware/lab/ransomware"
+            href="/modules/security/ransomware/lab"
             className="inline-flex items-center gap-2.5 px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded border border-slate-900 transition-colors shadow-sm"
           >
             <span>Mulai Laboratorium Sandboxing</span>
