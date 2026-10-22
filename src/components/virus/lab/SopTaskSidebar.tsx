@@ -5,17 +5,10 @@ import React from 'react';
 import Link from 'next/link';
 import { useVirusLabStore } from '@/store/useVirusLabStore';
 import { MissionConceptAccordion } from './MissionConceptAccordion';
-import { CheckCircle2, Circle, ShieldCheck, AlertCircle, Compass, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Circle, ShieldCheck, Compass, ArrowRight } from 'lucide-react';
 
 export function SopTaskSidebar() {
-  const {
-    phase,
-    completedSteps,
-    binaries,
-    processes,
-    reinfectionAlert,
-    clearReinfectionAlert,
-  } = useVirusLabStore();
+  const { phase, completedSteps } = useVirusLabStore();
 
   const isAllDisinfected = completedSteps.step4;
 
@@ -75,95 +68,93 @@ export function SopTaskSidebar() {
   ];
 
   return (
-    <aside className="w-full bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between shadow-xs">
-      <div className="space-y-3.5">
+    <aside className="w-full bg-white border border-slate-200 rounded-lg p-3.5 flex flex-col justify-between shadow-2xs space-y-3">
+      <div className="space-y-3">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold flex items-center gap-1.5">
-            <Compass className="w-3.5 h-3.5 text-slate-800" />
-            <span>Misi Investigasi Forensik (NIST SP 800-61)</span>
+            <Compass className="w-3.5 h-3.5 text-slate-700" />
+            <span>Misi Tanggap Insiden (NIST SP 800-61)</span>
           </div>
           <h2 className="text-xs font-bold text-slate-900 mt-0.5">
-            Panduan Berbasis Gejala &amp; Analisis Sebab-Akibat
+            Panduan Investigasi Forensik Berbasis Gejala
           </h2>
+          <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+            Analisis gejala di setiap panel dan tentukan urutan SOP penanganan yang benar.
+          </p>
         </div>
 
-        {/* Re-infection Alert Banner if triggered */}
-        {reinfectionAlert && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-300 text-red-950 text-xs space-y-2 animate-in fade-in">
-            <div className="flex items-start justify-between gap-1">
-              <div className="font-bold flex items-center gap-1.5 text-red-900 text-[11px]">
-                <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                <span>Eksperimen Re-Infeksi Nyata!</span>
-              </div>
-              <button
-                onClick={clearReinfectionAlert}
-                className="text-[10px] text-red-700 hover:text-red-950 underline font-mono"
-              >
-                Tutup
-              </button>
-            </div>
-            <p className="text-[10px] leading-relaxed text-red-800 font-sans">
-              {reinfectionAlert}
-            </p>
-          </div>
-        )}
-
-        {/* Task Steps with Concept Accordions */}
-        <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] pr-1">
-          {missionTasks.map((t) => (
+        {/* Mission Steps List */}
+        <div className="space-y-2">
+          {missionTasks.map((m) => (
             <div
-              key={t.id}
-              className={`p-3 rounded-lg border text-xs transition-colors ${
-                t.done
-                  ? 'bg-emerald-50/60 border-emerald-300 text-emerald-950'
-                  : t.active
-                  ? 'bg-slate-100 border-slate-400 text-slate-900 ring-1 ring-slate-400'
-                  : 'bg-slate-50/80 border-slate-200 text-slate-600'
+              key={m.id}
+              className={`p-2.5 rounded border transition-colors ${
+                m.done
+                  ? 'bg-emerald-50/40 border-emerald-200 text-slate-900'
+                  : m.active
+                  ? 'bg-amber-50/50 border-amber-300 text-slate-900'
+                  : 'bg-slate-50/60 border-slate-200 text-slate-500'
               }`}
             >
-              <div className="flex items-center gap-2 mb-1">
-                {t.done ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                ) : (
-                  <Circle className="w-4 h-4 text-slate-400 shrink-0" />
-                )}
-                <span className="font-bold text-[11px]">
-                  Misi {t.number}: {t.title}
-                </span>
+              <div className="flex items-start gap-2">
+                <div className="mt-0.5 shrink-0">
+                  {m.done ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <Circle className={`w-4 h-4 ${m.active ? 'text-amber-600 font-bold' : 'text-slate-300'}`} />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-bold leading-tight">
+                      {m.number}. {m.title}
+                    </span>
+                    <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-semibold ${
+                      m.done
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : m.active
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-slate-200 text-slate-600'
+                    }`}>
+                      {m.done ? 'SELESAI' : m.active ? 'AKTIF' : 'MENUNGGU'}
+                    </span>
+                  </div>
+                  <p className="text-[10.5px] text-slate-600 mt-1 leading-relaxed">
+                    {m.symptomDesc}
+                  </p>
+                </div>
               </div>
 
-              <p className="text-[10px] leading-relaxed pl-6 text-slate-600 font-sans">
-                {t.symptomDesc}
-              </p>
-
-              {/* Dynamic Accordion Unlocked after completion */}
-              <div className="pl-6">
-                <MissionConceptAccordion
-                  stepTitle={`Misi ${t.number}`}
-                  isUnlocked={t.done}
-                  conceptReason={t.conceptReason}
-                  realWorldDefense={t.realWorldDefense}
-                />
-              </div>
+              {/* Dynamic Unlocked Concept Accordion */}
+              <MissionConceptAccordion
+                stepTitle={m.title}
+                isUnlocked={m.done}
+                conceptReason={m.conceptReason}
+                realWorldDefense={m.realWorldDefense}
+              />
             </div>
           ))}
         </div>
       </div>
 
+      {/* Completion Banner (Only appears when all steps are completed) */}
       {isAllDisinfected && (
-        <div className="mt-3 p-3 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs font-mono space-y-2">
-          <div className="font-bold flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-700" />
-            <span>INVESTIGASI LULUS 100%</span>
+        <div className="pt-3 border-t border-slate-200 mt-2 space-y-2">
+          <div className="p-2.5 rounded bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold">Laboratorium Investigasi File Infector Tuntas!</div>
+              <div className="text-[10.5px] mt-0.5 text-emerald-900 leading-snug">
+                Seluruh berkas host berhasil dipulihkan, muatan parasit dibersihkan, dan rekonsiliasi hash SHA-256 cocok 100% dengan Golden Image.
+              </div>
+            </div>
           </div>
-          <p className="text-[10px] leading-relaxed font-sans">
-            Seluruh berkas host dipulihkan dan progres terekam otomatis ke database. Anda siap melanjutkan ke materi berikutnya!
-          </p>
+
           <Link
             href="/modules/security/worm/intro"
-            className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded border border-slate-900 flex items-center justify-center gap-2 transition-colors font-sans shadow-sm"
+            className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
           >
-            <span>Lanjut ke Materi Berikutnya: Network Worm</span>
+            <span>Materi Selanjutnya: Network Worm</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

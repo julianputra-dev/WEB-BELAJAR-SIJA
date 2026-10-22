@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, BookOpen, ShieldCheck } from 'lucide-react';
+import { Lock, Unlock, ChevronDown, ChevronUp, ShieldCheck, Lightbulb } from 'lucide-react';
 
 interface WormConceptCardProps {
   title: string;
@@ -19,39 +19,57 @@ export function WormConceptCard({
 }: WormConceptCardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  if (!isUnlocked) {
+    return (
+      <div className="mt-2 p-2 rounded border border-dashed border-slate-300 bg-slate-50/70 text-slate-400 text-[10px] flex items-center justify-between font-mono">
+        <div className="flex items-center gap-1.5">
+          <Lock className="w-3 h-3 text-slate-400 shrink-0" />
+          <span>Analisis Konseptual Terkunci</span>
+        </div>
+        <span className="text-[9px] text-slate-400">Selesaikan langkah ini untuk membuka</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="mt-2 border border-slate-200 rounded bg-white overflow-hidden text-xs">
+    <div className="mt-2 rounded border border-emerald-300 bg-emerald-50/40 overflow-hidden text-xs transition-all">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 text-left flex items-center justify-between text-slate-800 transition-colors font-mono"
+        className="w-full p-2 flex items-center justify-between text-left hover:bg-emerald-100/50 transition-colors"
       >
-        <span className="flex items-center gap-1.5 font-bold text-[10px]">
-          <BookOpen className="w-3 h-3 text-slate-600" />
-          <span>{title}</span>
-          {isUnlocked && (
-            <span className="text-[9px] bg-emerald-100 text-emerald-800 px-1 py-0.2 rounded font-semibold uppercase">
-              Terbuka
-            </span>
-          )}
-        </span>
-        {isOpen ? <ChevronUp className="w-3 h-3 text-slate-500" /> : <ChevronDown className="w-3 h-3 text-slate-500" />}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <Unlock className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+          <span className="font-bold text-emerald-950 text-[11px] truncate">
+            Wawasan Forensik: {title}
+          </span>
+        </div>
+        {isOpen ? (
+          <ChevronUp className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+        ) : (
+          <ChevronDown className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+        )}
       </button>
 
       {isOpen && (
-        <div className="p-2.5 space-y-2 bg-white text-[11px] leading-relaxed font-sans text-slate-600 border-t border-slate-100">
-          <div>
-            <strong className="text-slate-900 block text-[10px] font-mono uppercase mb-0.5">
-              Landasan Ilmiah Sebab-Akibat:
-            </strong>
-            <p>{conceptReason}</p>
+        <div className="p-2.5 border-t border-emerald-200/80 space-y-2 text-[11px] leading-relaxed bg-white">
+          <div className="space-y-1">
+            <div className="font-bold text-slate-900 flex items-center gap-1 text-[11px]">
+              <Lightbulb className="w-3 h-3 text-amber-600 shrink-0" />
+              <span>Penjelasan Konsep: Mengapa Kita Melakukan Ini?</span>
+            </div>
+            <p className="text-slate-600 pl-4 border-l-2 border-amber-300 text-[10.5px]">
+              {conceptReason}
+            </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-100 text-slate-700 bg-slate-50 p-2 rounded text-[10px] space-y-1">
-            <span className="font-semibold block text-slate-900 flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-emerald-600" />
-              <span>Praktik Defensif Enterprise (SOC / Blue Team):</span>
-            </span>
-            <p>{realWorldDefense}</p>
+          <div className="space-y-1 pt-1 border-t border-slate-100">
+            <div className="font-bold text-slate-900 flex items-center gap-1 text-[11px]">
+              <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+              <span>Prosedur Dunia Nyata (Enterprise Defense):</span>
+            </div>
+            <p className="text-slate-600 pl-4 border-l-2 border-emerald-300 text-[10.5px]">
+              {realWorldDefense}
+            </p>
           </div>
         </div>
       )}

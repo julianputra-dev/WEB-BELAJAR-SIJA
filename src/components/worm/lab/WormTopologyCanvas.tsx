@@ -11,35 +11,53 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
 import { WormCustomNode } from './WormCustomNode';
-import { Network, MousePointerClick, Radio } from 'lucide-react';
+import { Network, MousePointerClick, Radio, ShieldCheck } from 'lucide-react';
 
 const nodeTypes: NodeTypes = {
   wormNode: WormCustomNode,
 };
 
 export function WormTopologyCanvas() {
-  const { nodes, edges, isSimulating } = useWormTopologyStore();
+  const { nodes, edges, isSimulating, isFullyRemediated, triggerInitialInfection } = useWormTopologyStore();
 
   return (
     <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs flex flex-col h-[400px]">
       {/* Topology Canvas Toolbar */}
-      <div className="bg-slate-50 border-b border-slate-200 px-3.5 py-2 flex items-center justify-between text-xs font-mono">
+      <div className="bg-slate-50 border-b border-slate-200 px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
         <div className="flex items-center gap-2">
           <Network className="w-4 h-4 text-slate-700" />
           <span className="font-bold text-slate-900">
             Kanvas Interaktif Subnet SIJA (React Flow)
           </span>
-          {isSimulating && (
-            <span className="flex items-center gap-1 text-[10px] text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded font-semibold">
+          {isSimulating ? (
+            <span className="flex items-center gap-1 text-[10px] text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded font-semibold">
               <Radio className="w-2.5 h-2.5 animate-pulse" />
               <span>Scanning Pulse Aktif (2.5s)</span>
             </span>
-          )}
+          ) : isFullyRemediated ? (
+            <span className="flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-semibold">
+              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span>Subnet Terproteksi</span>
+            </span>
+          ) : null}
         </div>
 
-        <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-          <MousePointerClick className="w-3.5 h-3.5 text-slate-400" />
-          <span>Klik node untuk membuka X-Ray Inspector &amp; Kontrol SOP</span>
+        <div className="flex items-center gap-3">
+          {!isSimulating && !isFullyRemediated && (
+            <button
+              onClick={triggerInitialInfection}
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded shadow-xs transition-colors"
+              title="Luncurkan serangan worm otonom ke PC-01"
+            >
+              <Radio className="w-3.5 h-3.5 animate-pulse" />
+              <span>Picu Kompromi PC-01</span>
+            </button>
+          )}
+
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <MousePointerClick className="w-3.5 h-3.5 text-slate-400" />
+            <span className="hidden sm:inline">Klik node untuk X-Ray &amp; Kontrol SOP</span>
+          </div>
         </div>
       </div>
 

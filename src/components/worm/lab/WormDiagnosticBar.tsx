@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
-import { Activity, Wifi, ShieldAlert, Cpu, Radio, Network } from 'lucide-react';
+import { Activity, Wifi, ShieldAlert, ShieldCheck, Radio, AlertTriangle, X, Flame } from 'lucide-react';
 
 export function WormDiagnosticBar() {
   const {
@@ -13,6 +13,8 @@ export function WormDiagnosticBar() {
     isSimulating,
     executeScanningPulse,
     isFullyRemediated,
+    reinfectionAlert,
+    clearReinfectionAlert,
   } = useWormTopologyStore();
 
   // 2.5s Autonomous scanning pulse loop
@@ -26,77 +28,171 @@ export function WormDiagnosticBar() {
     return () => clearInterval(timer);
   }, [isSimulating, executeScanningPulse]);
 
-  const infectedCount = nodes.filter(
-    (n) => n.data.deviceType === 'pc' && n.data.status === 'infected'
-  ).length;
-  const totalPcs = nodes.filter((n) => n.data.deviceType === 'pc').length;
+  const pcs = nodes.filter((n) => n.data.deviceType === 'pc');
+  const infectedCount = pcs.filter((n) => n.data.status === 'infected').length;
+  const totalPcs = pcs.length;
 
   const isSaturated = bandwidthUsage >= 80;
   const isElevated = bandwidthUsage >= 35;
 
+  const allPortsBlocked = pcs.length > 0 && pcs.every((n) => !n.data.port445Open);
+  const anyPortBlocked = pcs.some((n) => !n.data.port445Open);
+
   return (
-    <div className="bg-slate-50 border-b border-slate-200 px-6 py-2.5 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
-      <div className="flex items-center gap-6">
-        {/* Bandwidth Usage */}
-        <div className="flex items-center gap-2">
-          <Wifi className="w-4 h-4 text-slate-500" />
-          <span className="text-slate-500">Utilisasi Bandwidth LAN:</span>
-          <span
-            className={`font-bold ${
-              isSaturated ? 'text-red-600' : isElevated ? 'text-amber-600' : 'text-slate-800'
-            }`}
+    <div className="space-y-2.5">
+      {/* Alert Notice: Re-infection Warning if triggered */}
+      {reinfectionAlert && (
+        <div className="bg-rose-50 border border-rose-300 text-rose-900 px-3.5 py-2.5 rounded text-xs flex items-start justify-between gap-3 shadow-xs">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold">Peringatan Rekoneksi Berbahaya: </span>
+              <span className="leading-relaxed">{reinfectionAlert}</span>
+            </div>
+          </div>
+          <button
+            onClick={clearReinfectionAlert}
+            className="text-rose-500 hover:text-rose-800 p-0.5 rounded transition-colors"
+            title="Tutup pemberitahuan"
           >
-            {bandwidthUsage}% {isSaturated ? '(SATURASI)' : ''}
-          </span>
-          <div className="w-20 h-1.5 bg-slate-200 rounded-full overflow-hidden inline-block ml-1">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Metrics Row: 5 Cards Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2.5">
+        {/* Metric 1: Bandwidth Usage */}
+        <div className="bg-white border border-slate-200 rounded p-2.5 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Utilisasi Bandwidth LAN</span>
+            <Wifi className={`w-3.5 h-3.5 ${isSaturated ? 'text-rose-600 animate-pulse' : 'text-slate-400'}`} />
+          </div>
+          <div className="mt-1 flex items-baseline gap-1.5">
+            <span className={`text-base font-bold font-mono ${isSaturated ? 'text-rose-700' : isElevated ? 'text-amber-700' : 'text-slate-900'}`}>
+              {bandwidthUsage}%
+            </span>
+            <span className="text-[10px] text-slate-500 font-mono">
+              {isSaturated ? 'saturasi' : 'throughput'}
+            </span>
+          </div>
+          <div className="w-full bg-slate-100 rounded-full h-1 mt-1.5 overflow-hidden">
             <div
-              className={`h-full transition-all duration-500 ${
-                isSaturated ? 'bg-red-500' : isElevated ? 'bg-amber-500' : 'bg-slate-700'
-              }`}
+              className={`h-full transition-all duration-300 ${isSaturated ? 'bg-rose-500' : isElevated ? 'bg-amber-500' : 'bg-slate-400'}`}
               style={{ width: `${Math.min(100, bandwidthUsage)}%` }}
             />
           </div>
+          <div className="text-[10px] text-slate-400 font-mono mt-0.5 truncate">
+            {isSaturated ? 'Lonjakan Trafik Port 445' : 'Trafik Broadcast Normal'}
+          </div>
         </div>
 
-        {/* Packet Rate */}
-        <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-slate-500" />
-          <span className="text-slate-500">Laju Paket Subnet:</span>
-          <span className={`font-semibold ${packetRate > 200 ? 'text-red-700' : 'text-slate-800'}`}>
-            {packetRate} pkt/s
-          </span>
+        {/* Metric 2: Packet Rate (NetFlow) */}
+        <div className="bg-white border border-slate-200 rounded p-2.5 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Laju Paket Subnet</span>
+            <Activity className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+          <div className="mt-1 flex items-baseline gap-1.5">
+            <span className={`text-base font-bold font-mono ${packetRate > 200 ? 'text-rose-700' : 'text-slate-900'}`}>
+              {packetRate}
+            </span>
+            <span className="text-[10px] text-slate-500 font-mono">pkt/s</span>
+          </div>
+          <div className="w-full bg-slate-100 rounded-full h-1 mt-1.5 overflow-hidden">
+            <div
+              className={`h-full transition-all duration-300 ${packetRate > 200 ? 'bg-rose-500' : 'bg-slate-400'}`}
+              style={{ width: `${Math.min(100, (packetRate / 600) * 100)}%` }}
+            />
+          </div>
+          <div className="text-[10px] text-slate-400 font-mono mt-0.5 truncate">
+            {packetRate > 200 ? 'SYN Scan Sweep Banjir' : 'Throughput Jaringan Stabil'}
+          </div>
         </div>
 
-        {/* Host Infection Status */}
-        <div className="flex items-center gap-2">
-          <ShieldAlert className="w-4 h-4 text-slate-500" />
-          <span className="text-slate-500">Host Terkompromi:</span>
-          <span
-            className={`font-bold px-1.5 py-0.5 rounded text-[10px] ${
+        {/* Metric 3: Host Terkompromi */}
+        <div className="bg-white border border-slate-200 rounded p-2.5 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Host Terkompromi</span>
+            {infectedCount > 0 ? (
+              <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
+            ) : isFullyRemediated ? (
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            ) : (
+              <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+            )}
+          </div>
+          <div className="mt-1">
+            <span className={`text-xs font-mono font-bold ${
               infectedCount > 0
-                ? 'bg-red-100 text-red-800 border border-red-200'
+                ? 'text-rose-700'
                 : isFullyRemediated
-                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                : 'bg-slate-200 text-slate-700'
-            }`}
-          >
-            {infectedCount} / {totalPcs} Workstation
-          </span>
+                ? 'text-emerald-700'
+                : 'text-slate-700'
+            }`}>
+              {infectedCount} / {totalPcs} WORKSTATION
+            </span>
+          </div>
+          <div className="text-[10px] text-slate-400 font-mono mt-0.5 truncate">
+            {infectedCount > 0
+              ? 'Lateral Movement Aktif'
+              : isFullyRemediated
+              ? 'Seluruh PC Terproteksi'
+              : 'Subnet Belum Terpapar'}
+          </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2 text-[11px] text-slate-500">
-        {isSimulating ? (
-          <span className="flex items-center gap-1.5 text-red-700 font-semibold">
-            <Radio className="w-3.5 h-3.5 animate-pulse text-red-600" />
-            <span>Detak Pemindaian Otomatis: Setiap 2.5 Detik</span>
-          </span>
-        ) : (
-          <span className="flex items-center gap-1 text-slate-500">
-            <Network className="w-3.5 h-3.5 text-slate-400" />
-            <span>Subnet Idle • Menunggu Inisiasi</span>
-          </span>
-        )}
+        {/* Metric 4: Firewall Port 445 (SMB ACL) */}
+        <div className="bg-white border border-slate-200 rounded p-2.5 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Firewall Port 445 (SMB)</span>
+            {allPortsBlocked ? (
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            ) : (
+              <Flame className="w-3.5 h-3.5 text-amber-500" />
+            )}
+          </div>
+          <div className="mt-1">
+            <span className={`text-xs font-mono font-bold ${
+              allPortsBlocked
+                ? 'text-emerald-700'
+                : anyPortBlocked
+                ? 'text-amber-700'
+                : 'text-slate-700'
+            }`}>
+              {allPortsBlocked
+                ? 'BLOKIR TOTAL (INBOUND)'
+                : anyPortBlocked
+                ? 'TERPARSIAL DITUTUP'
+                : 'ALLOW (PORT TERBUKA)'}
+            </span>
+          </div>
+          <div className="text-[10px] text-slate-400 font-mono mt-0.5 truncate">
+            {allPortsBlocked ? 'GPO NetBIOS/SMB Ditutup' : 'Rentan Exploit EternalBlue'}
+          </div>
+        </div>
+
+        {/* Metric 5: Detak Propagasi Worm */}
+        <div className="bg-white border border-slate-200 rounded p-2.5 shadow-2xs flex flex-col justify-between col-span-2 sm:col-span-4 lg:col-span-1">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Detak Propagasi Worm</span>
+            <Radio className={`w-3.5 h-3.5 ${isSimulating ? 'text-rose-600 animate-pulse' : 'text-slate-400'}`} />
+          </div>
+          <div className="mt-1">
+            <span className={`text-xs font-mono font-bold ${
+              isSimulating
+                ? 'text-rose-700'
+                : isFullyRemediated
+                ? 'text-emerald-700'
+                : 'text-slate-600'
+            }`}>
+              {isSimulating ? 'AKTIF (INTERVAL 2.5s)' : isFullyRemediated ? 'TERHENTI (AMAN)' : 'IDLE (MENUNGGU)'}
+            </span>
+          </div>
+          <div className="text-[10px] text-slate-400 font-mono mt-0.5 truncate">
+            {isSimulating ? 'Pemindaian IP Rentan' : 'Tidak Ada Paket Worm'}
+          </div>
+        </div>
       </div>
     </div>
   );

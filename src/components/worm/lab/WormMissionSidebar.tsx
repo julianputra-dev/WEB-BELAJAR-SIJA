@@ -4,9 +4,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
-import { ReinfectionAlertBanner } from './ReinfectionAlertBanner';
 import { WormConceptCard } from './WormConceptCard';
-import { CheckCircle2, Circle, ShieldCheck, Compass, ArrowRight, ShieldAlert } from 'lucide-react';
+import { CheckCircle2, Circle, ShieldCheck, Compass, ArrowRight } from 'lucide-react';
 
 export function WormMissionSidebar() {
   const { completedMissions, isSimulating, isFullyRemediated, runPostHardeningTest } =
@@ -68,92 +67,103 @@ export function WormMissionSidebar() {
   ];
 
   return (
-    <aside className="w-full bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between shadow-xs">
-      <div className="space-y-3.5">
+    <aside className="w-full bg-white border border-slate-200 rounded-lg p-3.5 flex flex-col justify-between shadow-2xs space-y-3">
+      <div className="space-y-3">
         <div>
           <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold flex items-center gap-1.5">
-            <Compass className="w-3.5 h-3.5 text-slate-800" />
-            <span>Misi Investigasi Insiden (NIST SP 800-61)</span>
+            <Compass className="w-3.5 h-3.5 text-slate-700" />
+            <span>Misi Tanggap Insiden (NIST SP 800-61)</span>
           </div>
           <h2 className="text-xs font-bold text-slate-900 mt-0.5">
-            Panduan Berbasis Gejala &amp; Validasi Sebab-Akibat
+            Panduan Investigasi Forensik Berbasis Gejala
           </h2>
-          <p className="text-[11px] text-slate-600 mt-1 leading-relaxed font-sans">
-            Trafik jaringan lokal lumpuh dan beban CPU meningkat di seluruh komputer laboratorium. Analisis vektor ancaman, hentikan penyebaran, amankan port firewall, dan pulihkan seluruh workstation.
+          <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+            Analisis anomali topologi jaringan dan terapkan urutan SOP penanganan insiden yang benar.
           </p>
         </div>
 
-        {/* Real-time Re-infection Warning Banner */}
-        <ReinfectionAlertBanner />
-
-        {/* Missions Checklist */}
-        <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] pr-1">
+        {/* Mission Steps List */}
+        <div className="space-y-2">
           {missions.map((m) => (
             <div
               key={m.id}
-              className={`p-3 rounded-lg border text-xs transition-colors ${
+              className={`p-2.5 rounded border transition-colors ${
                 m.done
-                  ? 'bg-emerald-50/60 border-emerald-300 text-emerald-950'
+                  ? 'bg-emerald-50/40 border-emerald-200 text-slate-900'
                   : m.active
-                  ? 'bg-slate-100 border-slate-400 text-slate-900 ring-1 ring-slate-400'
-                  : 'bg-slate-50/80 border-slate-200 text-slate-600'
+                  ? 'bg-amber-50/50 border-amber-300 text-slate-900'
+                  : 'bg-slate-50/60 border-slate-200 text-slate-500'
               }`}
             >
-              <div className="flex items-center gap-2 mb-1">
-                {m.done ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                ) : (
-                  <Circle className="w-4 h-4 text-slate-400 shrink-0" />
-                )}
-                <span className="font-bold text-[11px]">
-                  Misi {m.number}: {m.title}
-                </span>
+              <div className="flex items-start gap-2">
+                <div className="mt-0.5 shrink-0">
+                  {m.done ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <Circle className={`w-4 h-4 ${m.active ? 'text-amber-600 font-bold' : 'text-slate-300'}`} />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-bold leading-tight">
+                      {m.number}. {m.title}
+                    </span>
+                    <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-semibold ${
+                      m.done
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : m.active
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-slate-200 text-slate-600'
+                    }`}>
+                      {m.done ? 'SELESAI' : m.active ? 'AKTIF' : 'MENUNGGU'}
+                    </span>
+                  </div>
+                  <p className="text-[10.5px] text-slate-600 mt-1 leading-relaxed">
+                    {m.symptomDesc}
+                  </p>
+                </div>
               </div>
 
-              <p className="text-[10px] leading-relaxed pl-6 text-slate-600 font-sans">
-                {m.symptomDesc}
-              </p>
-
-              {/* Dynamic Accordion Unlocked after completion or for review */}
-              <div className="pl-6">
-                <WormConceptCard
-                  title={`Konsep: Misi ${m.number}`}
-                  isUnlocked={m.done}
-                  conceptReason={m.conceptReason}
-                  realWorldDefense={m.realWorldDefense}
-                />
-              </div>
+              {/* Dynamic Unlocked Concept Accordion */}
+              <WormConceptCard
+                title={m.title}
+                isUnlocked={m.done}
+                conceptReason={m.conceptReason}
+                realWorldDefense={m.realWorldDefense}
+              />
             </div>
           ))}
         </div>
       </div>
 
+      {/* Completion Banner (Only appears when all steps are completed) */}
       {isFullyRemediated && (
-        <div className="mt-3 p-3.5 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs font-mono space-y-2">
-          <div className="font-bold flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-700" />
-            <span>SUB-JARINGAN STERIL &amp; AMAN 100%</span>
+        <div className="pt-3 border-t border-slate-200 mt-2 space-y-2">
+          <div className="p-2.5 rounded bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold">Laboratorium Topologi Network Worm Tuntas!</div>
+              <div className="text-[10.5px] mt-0.5 text-emerald-900 leading-snug">
+                Seluruh workstation telah diisolasi, celah Port 445 ditutup di Firewall, memori RAM dibersihkan, dan rekoneksi LAN sukses tanpa siklus re-infeksi.
+              </div>
+            </div>
           </div>
-          <p className="text-[10px] leading-relaxed font-sans">
-            Seluruh workstation telah diisolasi, celah Port 445 ditutup di Firewall, memori RAM dibersihkan, dan rekoneksi LAN sukses tanpa siklus re-infeksi!
-          </p>
-          <div className="pt-1 flex flex-col gap-2">
-            <button
-              onClick={runPostHardeningTest}
-              className="w-full py-2 px-3 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded flex items-center justify-center gap-1.5 transition-colors font-mono shadow-xs"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Uji Ulang Ketahanan (Re-Attack Test)</span>
-            </button>
 
-            <Link
-              href="/modules/security/malware"
-              className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded border border-slate-900 flex items-center justify-center gap-2 transition-colors font-sans shadow-sm"
-            >
-              <span>Kembali ke Katalog Malware SIJA</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+          <button
+            onClick={runPostHardeningTest}
+            className="w-full py-1.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded flex items-center justify-center gap-1.5 transition-colors font-mono shadow-xs"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-200" />
+            <span>Uji Ulang Ketahanan (Re-Attack Test)</span>
+          </button>
+
+          <Link
+            href="/modules/security/ransomware/intro"
+            className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+          >
+            <span>Materi Selanjutnya: Ransomware</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       )}
     </aside>

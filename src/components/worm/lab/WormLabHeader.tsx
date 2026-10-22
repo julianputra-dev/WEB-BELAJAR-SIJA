@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Network, RefreshCw, ArrowLeft, Radio, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Network, RotateCcw, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
 
 export function WormLabHeader() {
@@ -11,80 +11,83 @@ export function WormLabHeader() {
     mistakes,
     isSimulating,
     isFullyRemediated,
-    triggerInitialInfection,
-    runPostHardeningTest,
     resetTopology,
   } = useWormTopologyStore();
 
+  const getStatusBadge = () => {
+    if (isFullyRemediated) {
+      return { text: 'SUB-JARINGAN STERIL • TERVERIFIKASI', color: 'bg-emerald-50 text-emerald-800 border-emerald-300' };
+    }
+    if (isSimulating) {
+      return { text: 'SERANGAN AKTIF • PROPAGASI SMB', color: 'bg-rose-50 text-rose-700 border-rose-200 animate-pulse' };
+    }
+    return { text: 'SUBNET 192.168.10.0/24', color: 'bg-slate-100 text-slate-700 border-slate-200' };
+  };
+
+  const badge = getStatusBadge();
+
   return (
-    <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-40">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded bg-slate-900 text-white flex items-center justify-center border border-slate-800 shrink-0">
-          <Network className="w-4 h-4" />
-        </div>
-        <div>
+    <header className="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30 shadow-xs">
+      <div className="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+        {/* Left: Navigation and Title */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/modules/security/worm/intro"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded border border-slate-300 transition-colors"
+            title="Kembali ke Modul Teori Worm"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Modul Teori</span>
+          </Link>
+
+          <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+
           <div className="flex items-center gap-2">
-            <h1 className="text-sm font-bold text-slate-900">
-              Laboratorium Topologi: Network Worm (Autonomous Propagation &amp; SMB Port 445)
-            </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
-              SUBNET 192.168.10.0/24
+            <div className="p-1.5 bg-slate-900 text-white rounded">
+              <Network className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                  Laboratorium Topologi: Network Worm
+                </h1>
+                <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border font-semibold ${badge.color}`}>
+                  {badge.text}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 hidden md:block">
+                Simulasi Replikasi Jaringan Otonom, Analisis Paket SMB, dan Validasi SOP Isolasi Topologi
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Telemetry & Actions */}
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-mono">
+            <span className="text-slate-500">Pelanggaran SOP:</span>
+            <span className={`font-bold ${mistakes > 0 ? 'text-rose-600' : 'text-slate-700'}`}>
+              {mistakes}
             </span>
           </div>
-          <p className="text-[11px] text-slate-500 font-mono">
-            SOP Investigasi: Triage Pemindaian Subnet → Isolasi Fisik LAN → Blokir Port 445 Firewall → Terminasi Proses RAM
-          </p>
-        </div>
-      </div>
 
-      <div className="flex items-center gap-2.5">
-        <div className="text-[11px] font-mono text-slate-600 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded">
-          Kesalahan Prosedur:{' '}
-          <span className={mistakes > 0 ? 'text-red-600 font-bold' : 'text-slate-900 font-bold'}>
-            {mistakes}
-          </span>
-        </div>
-
-        {isFullyRemediated ? (
           <button
-            onClick={runPostHardeningTest}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded shadow-xs transition-colors font-mono"
-            title="Luncurkan uji penetrasi ulang untuk memvalidasi ketahanan firewall"
+            onClick={resetTopology}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded transition-colors shadow-xs"
+            title="Reset topologi ke kondisi awal"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-200" />
-            <span>Uji Ketahanan Pasca-Mitigasi (Re-Attack Test)</span>
+            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+            <span>Reset Lab</span>
           </button>
-        ) : !isSimulating ? (
-          <button
-            onClick={triggerInitialInfection}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded shadow-xs transition-colors"
+
+          <Link
+            href="/modules/security/malware"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 rounded transition-colors shadow-xs"
           >
-            <Radio className="w-3.5 h-3.5 animate-pulse" />
-            <span>Picu Kompromi PC-01</span>
-          </button>
-        ) : (
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-50 text-red-700 border border-red-200 text-[11px] font-mono rounded">
-            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
-            <span>SERANGAN AKTIF</span>
-          </div>
-        )}
-
-        <button
-          onClick={resetTopology}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded border border-slate-300 transition-colors"
-          title="Reset topologi ke kondisi awal"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Reset Lab</span>
-        </button>
-
-        <Link
-          href="/modules/security/worm/intro"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium rounded border border-slate-300 transition-colors"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Teori Dasar</span>
-        </Link>
+            <span>Katalog Malware</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
     </header>
   );
