@@ -168,10 +168,10 @@ export function RansomwareSopSidebar() {
           </div>
 
           <Link
-            href="/modules/security/malware"
+            href="/modules/security/trojan/intro"
             className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
           >
-            <span>Katalog Malware Berikutnya</span>
+            <span>Materi Selanjutnya: Trojan Horse</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
