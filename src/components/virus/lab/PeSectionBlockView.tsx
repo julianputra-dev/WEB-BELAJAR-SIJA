@@ -3,7 +3,12 @@
 
 import React from 'react';
 import { ForensicBinary } from '@/store/useVirusLabStore';
-import { ArrowRight, CornerDownRight, ShieldAlert, CheckCircle2, Zap } from 'lucide-react';
+import {
+  ArrowRight,
+  ShieldAlert,
+  CheckCircle2,
+  Zap
+} from 'lucide-react';
 
 interface PeSectionBlockViewProps {
   binary: ForensicBinary;

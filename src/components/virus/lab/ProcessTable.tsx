@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { useVirusLabStore, ForensicProcess } from '@/store/useVirusLabStore';
+import { useVirusLabStore } from '@/store/useVirusLabStore';
 import { Cpu, XCircle, AlertTriangle } from 'lucide-react';
 
 export function ProcessTable() {

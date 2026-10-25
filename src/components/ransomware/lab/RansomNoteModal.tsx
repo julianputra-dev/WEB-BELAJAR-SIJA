@@ -2,7 +2,13 @@
 'use client';
 
 import React from 'react';
-import { AlertTriangle, Lock, X, DollarSign, ShieldAlert, ExternalLink } from 'lucide-react';
+import {
+  AlertTriangle,
+  Lock,
+  X,
+  DollarSign,
+  ShieldAlert
+} from 'lucide-react';
 import { useRansomwareLabStore } from '@/store/useRansomwareLabStore';
 
 export function RansomNoteModal() {

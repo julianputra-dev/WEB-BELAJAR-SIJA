@@ -1,7 +1,7 @@
 // File: src/components/virus/theory/CaseStudyGrid.tsx
 import React from 'react';
 import { CASE_STUDIES, FORENSIC_IOCS } from '@/data/virusTheoryData';
-import { History, Search, AlertCircle } from 'lucide-react';
+import { History, Search } from 'lucide-react';
 
 export function CaseStudyGrid() {
   return (

@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { Terminal, Shield } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 import { useTrojanLabStore } from '@/store/useTrojanLabStore';
 
 export function TrojanTerminalConsole() {

@@ -1,6 +1,6 @@
 // File: src/components/landing/HeroSection.tsx
 import React from 'react';
-import Link from 'next/link';
+
 import { ArrowRight, BookOpen, CheckCircle2 } from 'lucide-react';
 import { HeroPortalCard } from './HeroPortalCard';
 

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { WormNodeData } from '@/types/wormLab';
-import { Binary, ShieldCheck, ShieldAlert, Cpu, Terminal } from 'lucide-react';
+import { Binary, ShieldCheck, Terminal } from 'lucide-react';
 
 interface SmbPacketInspectorProps {
   data: WormNodeData;

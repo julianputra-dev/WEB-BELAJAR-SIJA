@@ -1,7 +1,7 @@
 // File: src/components/virus/theory/VirusHeroBanner.tsx
 import React from 'react';
 import Link from 'next/link';
-import { Shield, ArrowRight, ArrowLeft, BookOpen, Binary } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Binary } from 'lucide-react';
 
 export function VirusHeroBanner() {
   return (

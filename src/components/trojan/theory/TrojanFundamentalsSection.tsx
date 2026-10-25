@@ -1,6 +1,12 @@
 // File: src/components/trojan/theory/TrojanFundamentalsSection.tsx
 import React from 'react';
-import { HelpCircle, Shield, SplitSquareVertical, EyeOff, Radio, RefreshCwOff } from 'lucide-react';
+import {
+  HelpCircle,
+  SplitSquareVertical,
+  EyeOff,
+  Radio,
+  RefreshCwOff
+} from 'lucide-react';
 import { TROJAN_CHARACTERISTICS, MALWARE_TRIAD_COMPARISON } from '@/data/trojanTheoryData';
 
 export function TrojanFundamentalsSection() {

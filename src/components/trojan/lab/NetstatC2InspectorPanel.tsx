@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { Network, Radio, Filter, ArrowRight, Shield, ShieldAlert, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Network, Radio, Filter, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useTrojanLabStore } from '@/store/useTrojanLabStore';
 
 export function NetstatC2InspectorPanel() {

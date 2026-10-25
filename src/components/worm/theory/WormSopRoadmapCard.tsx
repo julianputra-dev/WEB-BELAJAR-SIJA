@@ -1,7 +1,14 @@
 // File: src/components/worm/theory/WormSopRoadmapCard.tsx
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, Network, Lock, Cpu, CheckCircle2, AlertTriangle } from 'lucide-react';
+import {
+  ArrowRight,
+  Network,
+  Lock,
+  Cpu,
+  CheckCircle2,
+  AlertTriangle
+} from 'lucide-react';
 
 export function WormSopRoadmapCard() {
   const sopSteps = [

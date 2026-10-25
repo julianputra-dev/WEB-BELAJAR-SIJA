@@ -1,6 +1,6 @@
 // File: src/components/worm/theory/WormCaseStudyGrid.tsx
 import React from 'react';
-import { History, ShieldAlert, Award } from 'lucide-react';
+import { History, Award } from 'lucide-react';
 import { WORM_CASE_STUDIES } from '@/data/wormTheoryData';
 
 export function WormCaseStudyGrid() {

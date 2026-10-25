@@ -1,6 +1,12 @@
 // File: src/components/virus/theory/VirusFundamentalsSection.tsx
 import React from 'react';
-import { HelpCircle, FileCheck, MousePointerClick, RefreshCcw, ShieldAlert, Cpu } from 'lucide-react';
+import {
+  HelpCircle,
+  FileCheck,
+  MousePointerClick,
+  RefreshCcw,
+  ShieldAlert
+} from 'lucide-react';
 
 export function VirusFundamentalsSection() {
   const characteristics = [

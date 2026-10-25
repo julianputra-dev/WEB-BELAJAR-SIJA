@@ -1,6 +1,6 @@
 // File: src/components/worm/theory/WormPropagationMechanismSection.tsx
 import React from 'react';
-import { Network, Activity, ShieldCheck, ShieldAlert, Cpu, Radio, Layers } from 'lucide-react';
+import { Network, Activity, Radio } from 'lucide-react';
 import { PROPAGATION_MECHANISMS, NETWORK_IOCS } from '@/data/wormTheoryData';
 
 export function WormPropagationMechanismSection() {

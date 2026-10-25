@@ -1,7 +1,7 @@
 // File: src/components/virus/theory/InfectionMechanismSection.tsx
 import React from 'react';
 import { INFECTION_VECTORS } from '@/data/virusTheoryData';
-import { Layers, FileCode, Sparkles } from 'lucide-react';
+import { Layers, FileCode } from 'lucide-react';
 
 export function InfectionMechanismSection() {
   return (

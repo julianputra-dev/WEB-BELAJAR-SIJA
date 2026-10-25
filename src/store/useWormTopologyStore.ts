@@ -6,9 +6,9 @@ import {
   PacketLogEntry,
   WormLabMissions,
   NodeStatus,
-  PostHardeningAuditResult,
+  PostHardeningAuditResult
 } from '@/types/wormLab';
-import { INITIAL_WORM_NODES, INITIAL_WORM_EDGES, INITIAL_PACKET_LOGS } from '@/data/wormLabInitialData';
+import { INITIAL_WORM_NODES, INITIAL_PACKET_LOGS } from '@/data/wormLabInitialData';
 import { ProgressService } from '@/services/progressService';
 
 interface WormTopologyStore {

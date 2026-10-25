@@ -2,7 +2,15 @@
 'use client';
 
 import React from 'react';
-import { Eye, FileCode, Lock, AlertCircle, RefreshCw, Hash, FileText, Unplug } from 'lucide-react';
+import {
+  Eye,
+  FileCode,
+  AlertCircle,
+  RefreshCw,
+  Hash,
+  FileText,
+  Unplug
+} from 'lucide-react';
 import { useRansomwareLabStore } from '@/store/useRansomwareLabStore';
 
 export function FileHexEntropyInspector() {

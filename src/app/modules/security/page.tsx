@@ -5,11 +5,10 @@ import {
   Shield,
   ArrowLeft,
   ArrowRight,
-  ChevronRight,
   Lock,
   Database,
   Globe,
-  Bug,
+  Bug
 } from 'lucide-react';
 
 export default function SecuritySubjectPage() {

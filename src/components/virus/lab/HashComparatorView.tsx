@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { ForensicBinary } from '@/store/useVirusLabStore';
-import { Binary, ShieldCheck, ShieldAlert, Check, X } from 'lucide-react';
+import { Binary, Check, X } from 'lucide-react';
 
 interface HashComparatorViewProps {
   binary: ForensicBinary;

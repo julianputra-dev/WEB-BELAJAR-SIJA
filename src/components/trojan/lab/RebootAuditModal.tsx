@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Power, RotateCcw, AlertTriangle, CheckCircle2, ShieldAlert, X } from 'lucide-react';
+import { Power, RotateCcw, CheckCircle2, ShieldAlert, X } from 'lucide-react';
 import { useTrojanLabStore } from '@/store/useTrojanLabStore';
 
 export function RebootAuditModal() {

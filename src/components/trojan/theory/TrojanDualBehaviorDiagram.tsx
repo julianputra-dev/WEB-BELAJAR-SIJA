@@ -1,6 +1,14 @@
 // File: src/components/trojan/theory/TrojanDualBehaviorDiagram.tsx
 import React from 'react';
-import { Network, Terminal, Shield, ArrowDown, ArrowRight, CornerDownRight, Server, Laptop, Activity } from 'lucide-react';
+import {
+  Network,
+  Terminal,
+  ArrowDown,
+  ArrowRight,
+  Server,
+  Laptop,
+  Activity
+} from 'lucide-react';
 
 export function TrojanDualBehaviorDiagram() {
   return (

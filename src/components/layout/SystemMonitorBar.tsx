@@ -3,7 +3,12 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useLessonPhaseStore } from '@/store/useLessonPhaseStore';
-import { Cpu, Activity, Wifi, Terminal as TerminalIcon, Trash2 } from 'lucide-react';
+import {
+  Cpu,
+  Activity,
+  Wifi,
+  Terminal as TerminalIcon
+} from 'lucide-react';
 
 interface SystemMonitorBarProps {
   cpuUsage?: number;

@@ -1,7 +1,7 @@
 // File: src/components/virus/lab/ForensicTerminal.tsx
 import React, { useEffect, useRef } from 'react';
 import { useVirusLabStore } from '@/store/useVirusLabStore';
-import { Terminal, Copy } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 
 export function ForensicTerminal() {
   const { systemLogs } = useVirusLabStore();

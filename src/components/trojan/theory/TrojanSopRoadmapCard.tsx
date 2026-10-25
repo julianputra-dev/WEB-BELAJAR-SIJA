@@ -1,7 +1,13 @@
 // File: src/components/trojan/theory/TrojanSopRoadmapCard.tsx
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Terminal, ShieldAlert, Trash2, AlertTriangle, Cpu, Radio, CheckCircle2 } from 'lucide-react';
+import {
+  ArrowRight,
+  Terminal,
+  Trash2,
+  AlertTriangle,
+  Cpu
+} from 'lucide-react';
 import { TROJAN_SOP_STEPS } from '@/data/trojanTheoryData';
 
 export function TrojanSopRoadmapCard() {

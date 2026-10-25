@@ -1,6 +1,6 @@
 // File: src/components/trojan/theory/TrojanBackdoorC2Section.tsx
 import React from 'react';
-import { Network, Activity, Radio, Layers, Server, ShieldAlert, Cpu } from 'lucide-react';
+import { Network, Radio, Server } from 'lucide-react';
 import { BACKDOOR_STAGES, TROJAN_IOCS } from '@/data/trojanTheoryData';
 import { TrojanDualBehaviorDiagram } from './TrojanDualBehaviorDiagram';
 

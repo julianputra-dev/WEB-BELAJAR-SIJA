@@ -6,14 +6,10 @@ import { useLessonPhaseStore } from '@/store/useLessonPhaseStore';
 import { ProgressService } from '@/services/progressService';
 import {
   KeyRound,
-  Eye,
   Shield,
   Trash2,
-  CheckCircle,
-  Lock,
   Terminal,
-  Smartphone,
-  AlertTriangle,
+  Smartphone
 } from 'lucide-react';
 
 export const SpywareSandbox: React.FC = () => {

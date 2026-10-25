@@ -4,7 +4,7 @@
 import React from 'react';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
 import { WormNodeData } from '@/types/wormLab';
-import { Cpu, XCircle, Shield, AlertTriangle } from 'lucide-react';
+import { Cpu, XCircle, AlertTriangle } from 'lucide-react';
 
 interface WormTaskManagerProps {
   nodeId: string;

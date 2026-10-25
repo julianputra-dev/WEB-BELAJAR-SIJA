@@ -2,7 +2,12 @@
 'use client';
 
 import React from 'react';
-import { Cpu, Trash2, ShieldCheck, ShieldAlert, AlertTriangle } from 'lucide-react';
+import {
+  Cpu,
+  Trash2,
+  ShieldCheck,
+  ShieldAlert
+} from 'lucide-react';
 import { useRansomwareLabStore } from '@/store/useRansomwareLabStore';
 
 export function RansomwareProcessMonitor() {

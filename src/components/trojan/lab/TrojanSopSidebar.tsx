@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useTrojanLabStore } from '@/store/useTrojanLabStore';
 import { TrojanMissionConceptAccordion } from './TrojanMissionConceptAccordion';
-import { CheckCircle2, Circle, Compass, ShieldCheck, ArrowRight, Award } from 'lucide-react';
+import { CheckCircle2, Circle, Compass, ArrowRight, Award } from 'lucide-react';
 
 export function TrojanSopSidebar() {
   const { completedMissions, appTrojan, isFullyRemediated, mistakes } = useTrojanLabStore();

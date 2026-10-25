@@ -2,8 +2,13 @@
 'use client';
 
 import React from 'react';
-import { useVirusLabStore, ForensicBinary } from '@/store/useVirusLabStore';
-import { Folder, Play, Archive, FileText, CheckCircle2 } from 'lucide-react';
+import { useVirusLabStore } from '@/store/useVirusLabStore';
+import {
+  Folder,
+  Play,
+  Archive,
+  FileText
+} from 'lucide-react';
 
 export function HostDirectoryExplorer() {
   const { binaries, selectedFileId, setSelectedFileId, launchApplication } = useVirusLabStore();

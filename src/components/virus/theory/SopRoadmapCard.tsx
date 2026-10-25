@@ -1,7 +1,13 @@
 // File: src/components/virus/theory/SopRoadmapCard.tsx
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Terminal, ShieldAlert, Cpu, Lock, Archive, CheckCircle2 } from 'lucide-react';
+import {
+  ArrowRight,
+  Cpu,
+  Lock,
+  Archive,
+  CheckCircle2
+} from 'lucide-react';
 
 export function SopRoadmapCard() {
   const sopSteps = [

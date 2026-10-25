@@ -1,6 +1,6 @@
 // File: src/components/trojan/theory/TrojanPersistenceSection.tsx
 import React from 'react';
-import { Lock, Cpu, Database, AlertCircle, ShieldAlert, FileX2, Terminal } from 'lucide-react';
+import { Lock, Database, FileX2 } from 'lucide-react';
 import { PERSISTENCE_MECHANISMS } from '@/data/trojanTheoryData';
 
 export function TrojanPersistenceSection() {

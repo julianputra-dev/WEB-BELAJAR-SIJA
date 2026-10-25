@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { Cpu, Shield, AlertTriangle, CheckCircle2, RotateCcw, Link2 } from 'lucide-react';
+import { Cpu, Shield, Link2 } from 'lucide-react';
 import { useTrojanLabStore } from '@/store/useTrojanLabStore';
 
 export function ProcessFirewallPanel() {

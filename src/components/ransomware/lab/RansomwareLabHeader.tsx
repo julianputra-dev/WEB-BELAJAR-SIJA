@@ -3,7 +3,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, RotateCcw, ShieldCheck, AlertCircle, HardDrive, ArrowRight } from 'lucide-react';
+import {
+  ArrowLeft,
+  RotateCcw,
+  HardDrive,
+  ArrowRight
+} from 'lucide-react';
 import { useRansomwareLabStore } from '@/store/useRansomwareLabStore';
 
 export function RansomwareLabHeader() {

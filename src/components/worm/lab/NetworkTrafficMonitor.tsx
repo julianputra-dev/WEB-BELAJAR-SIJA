@@ -3,8 +3,13 @@
 
 import React, { useState } from 'react';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
-import { PacketLogEntry } from '@/types/wormLab';
-import { Radio, ShieldAlert, Filter, Pause, Play, CheckCircle2 } from 'lucide-react';
+import {  } from '@/types/wormLab';
+import {
+  Radio,
+  Filter,
+  Pause,
+  Play
+} from 'lucide-react';
 
 export function NetworkTrafficMonitor() {
   const { packetLogs, bandwidthUsage, packetRate, isSimulating } = useWormTopologyStore();

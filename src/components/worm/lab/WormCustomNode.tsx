@@ -5,7 +5,14 @@ import React from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { WormNodeData } from '@/types/wormLab';
 import { useWormTopologyStore } from '@/store/useWormTopologyStore';
-import { Monitor, Server, Network, Wifi, WifiOff, ShieldCheck, ShieldAlert, Cpu } from 'lucide-react';
+import {
+  Monitor,
+  Server,
+  Network,
+  Wifi,
+  WifiOff,
+  ShieldCheck
+} from 'lucide-react';
 
 export const WormCustomNode = ({ id, data }: NodeProps & { data: WormNodeData }) => {
   const { selectedNodeId, setSelectedNode } = useWormTopologyStore();
