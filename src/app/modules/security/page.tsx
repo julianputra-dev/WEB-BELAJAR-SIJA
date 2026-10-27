@@ -16,10 +16,10 @@ export default function SecuritySubjectPage() {
     {
       id: 'malware',
       title: 'Analisis & Simulasi Malware',
-      desc: 'Observasi 5 skenario malware di lingkungan terisolasi serta validasi SOP mitigasi berurutan.',
+      desc: 'Observasi 6 skenario malware di lingkungan terisolasi serta validasi SOP mitigasi berurutan.',
       href: '/modules/security/malware',
       icon: <Bug className="w-5 h-5 text-slate-800" />,
-      badge: '5 Lab Tersedia',
+      badge: '6 Lab Tersedia',
     },
     {
       id: 'cia-triad',

@@ -1,7 +1,7 @@
 // File: src/types/simulation.ts
 import { Node, Edge } from '@xyflow/react';
 
-export type MalwareType = 'virus' | 'worm' | 'trojan' | 'ransomware' | 'spyware';
+export type MalwareType = 'virus' | 'worm' | 'trojan' | 'ransomware' | 'spyware' | 'rootkit';
 
 export type SimulationPhase =
   | 'idle'              // Menunggu siswa memicu simulasi infeksi

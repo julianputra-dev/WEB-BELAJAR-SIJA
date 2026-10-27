@@ -5,6 +5,7 @@ import { wormScenario } from './wormScenario';
 import { ransomwareScenario } from './ransomwareScenario';
 import { trojanScenario } from './trojanScenario';
 import { spywareScenario } from './spywareScenario';
+import { rootkitScenario } from './rootkitScenario';
 
 // Urutan kurikulum terstruktur: Pemula -> Menengah -> Lanjutan
 export const allScenarios: Record<MalwareType, ScenarioMetadata> = {
@@ -13,6 +14,7 @@ export const allScenarios: Record<MalwareType, ScenarioMetadata> = {
   ransomware: ransomwareScenario,
   trojan: trojanScenario,
   spyware: spywareScenario,
+  rootkit: rootkitScenario,
 };
 
 export function getScenario(type: string): ScenarioMetadata | undefined {
